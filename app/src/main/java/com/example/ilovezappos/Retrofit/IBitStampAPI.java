@@ -3,6 +3,7 @@ package com.example.ilovezappos.Retrofit;
 import android.database.Observable;
 
 import com.example.ilovezappos.Model.OrderBook;
+import com.example.ilovezappos.Model.TickerHour;
 import com.example.ilovezappos.Model.Transaction;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface IBitStampAPI {
 
     @GET("order_book/{pair}")
     Observable<List<OrderBook>> getOrderBook(@Path("pair") String currencyPair);
+
+    @GET("ticker_hour/{pair}")
+    Observable<List<TickerHour>> getTickerHour(@Path("pair") String currencyPair);
 }

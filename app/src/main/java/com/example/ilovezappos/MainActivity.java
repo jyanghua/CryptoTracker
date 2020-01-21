@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
 //        priceChart.setOnChartValueSelectedListener(MainActivity.this);
         priceChart.setDragEnabled(true);
         priceChart.setScaleEnabled(false);
+        priceChart.setTouchEnabled(true);
+
+        priceChart.getXAxis().setDrawGridLines(false);
+
+        //java.time.Instant.ofEpochSecond()
 
         ArrayList<Entry> yValues = new ArrayList<>();
 
