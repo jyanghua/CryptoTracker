@@ -2,9 +2,16 @@ package com.example.ilovezappos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.ilovezappos.Model.Transaction;
+import com.example.ilovezappos.Retrofit.IBitStampAPI;
+import com.example.ilovezappos.Retrofit.RetrofitClient;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -14,24 +21,78 @@ import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
     private LineChart priceChart;
+
+    IBitStampAPI bitStampAPI;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize API
+        Retrofit retrofit = RetrofitClient.getInstance();
+        bitStampAPI = retrofit.create(IBitStampAPI.class);
+
+        // Check internet connection
+        if (isNetworkConnected()){
+            fetchData();
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+        bitStampAPI.getTransaction("btcusd")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Transaction>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Transaction> transactions) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        // Line Chart with MPAndroidChart
         priceChart = (LineChart) findViewById(R.id.lineChart);
 
 //        priceChart.setOnChartGestureListener(MainActivity.this);
 //        priceChart.setOnChartValueSelectedListener(MainActivity.this);
         priceChart.setDragEnabled(true);
         priceChart.setScaleEnabled(false);
+        priceChart.setTouchEnabled(true);
+
+        priceChart.getXAxis().setDrawGridLines(false);
+
 
         ArrayList<Entry> yValues = new ArrayList<>();
 
@@ -47,5 +108,28 @@ public class MainActivity extends AppCompatActivity {
         LineData data = new LineData(dataSets);
 
         priceChart.setData(data);
+    }
+
+    private void fetchData() {
+        compositeDisposable.add(bitStampAPI.getTransaction("btcusd")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(transactions -> displayData(transactions)));
+    }
+
+    private void displayData(List<Transaction> transactions) {
+
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    @Override
+    protected void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
     }
 }
