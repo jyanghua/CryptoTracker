@@ -1,12 +1,15 @@
 package com.example.ilovezappos;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.ilovezappos.Model.Transaction;
@@ -19,6 +22,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Bottom Navigation Bar
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         // Initialize API
         Retrofit retrofit = RetrofitClient.getInstance();
@@ -83,14 +91,13 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         // Line Chart with MPAndroidChart
-        priceChart = (LineChart) findViewById(R.id.lineChart);
+        priceChart = findViewById(R.id.lineChart);
 
 //        priceChart.setOnChartGestureListener(MainActivity.this);
 //        priceChart.setOnChartValueSelectedListener(MainActivity.this);
         priceChart.setDragEnabled(true);
         priceChart.setScaleEnabled(false);
         priceChart.setTouchEnabled(true);
-
         priceChart.getXAxis().setDrawGridLines(false);
 
 
@@ -126,6 +133,28 @@ public class MainActivity extends AppCompatActivity {
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            menuItem -> {
+                Fragment selectedFragment = null;
+
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_home:
+                        selectedFragment = new HomeFragment();
+                        break;
+                    case R.id.nav_order_book:
+                        selectedFragment = new OrderBookFragment();
+                        break;
+                    case R.id.nav_alerts:
+                        selectedFragment = new AlertsFragment();
+                        break;
+                }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        selectedFragment).commit();
+
+                return true;
+            };
 
     @Override
     protected void onStop() {
