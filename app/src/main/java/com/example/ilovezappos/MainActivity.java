@@ -39,10 +39,6 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private LineChart priceChart;
-
-    IBitStampAPI bitStampAPI;
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,85 +49,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        // Initialize API
-        Retrofit retrofit = RetrofitClient.getInstance();
-        bitStampAPI = retrofit.create(IBitStampAPI.class);
-
-        // Check internet connection
-        if (isNetworkConnected()){
-            fetchData();
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG);
-            toast.show();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).commit();
         }
 
-        bitStampAPI.getTransaction("btcusd")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Transaction>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<Transaction> transactions) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-        // Line Chart with MPAndroidChart
-        priceChart = findViewById(R.id.lineChart);
-
-//        priceChart.setOnChartGestureListener(MainActivity.this);
-//        priceChart.setOnChartValueSelectedListener(MainActivity.this);
-        priceChart.setDragEnabled(true);
-        priceChart.setScaleEnabled(false);
-        priceChart.setTouchEnabled(true);
-        priceChart.getXAxis().setDrawGridLines(false);
-
-
-        ArrayList<Entry> yValues = new ArrayList<>();
-
-        // Insert the values here
-
-        LineDataSet set1 = new LineDataSet(yValues, "Data Set 1");
-
-        set1.setFillAlpha(110);
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set1);
-
-        LineData data = new LineData(dataSets);
-
-        priceChart.setData(data);
-    }
-
-    private void fetchData() {
-        compositeDisposable.add(bitStampAPI.getTransaction("btcusd")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(transactions -> displayData(transactions)));
-    }
-
-    private void displayData(List<Transaction> transactions) {
-
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -155,10 +77,4 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
             };
-
-    @Override
-    protected void onStop() {
-        compositeDisposable.clear();
-        super.onStop();
-    }
 }

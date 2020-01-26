@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ILoveZappos</string>
     <string name="home_fragment">Home Fragment</string>
+    <string name="togglebutton">ToggleButton</string>
 </resources>

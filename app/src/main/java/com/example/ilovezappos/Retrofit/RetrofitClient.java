@@ -1,18 +1,20 @@
 package com.example.ilovezappos.Retrofit;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static Retrofit ourInstance;
+    private static Retrofit rInstance;
 
     public static Retrofit getInstance() {
-        if(ourInstance == null)
-            ourInstance = new Retrofit.Builder()
+        if(rInstance == null)
+            rInstance = new Retrofit.Builder()
                     .baseUrl("https://www.bitstamp.net/api/v2/")
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
-        return ourInstance;
+        return rInstance;
     }
 
     private RetrofitClient() {
