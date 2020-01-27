@@ -9,3 +9,7 @@ Major requirements:
 2. Order Book
 3. Price Alert
 
+More details will be included in the future.
+
+
+![Background](https://i.imgur.com/GwPV1yo.png)
