@@ -52,31 +52,6 @@ public class HomeFragment extends Fragment {
         Retrofit retrofit = RetrofitClient.getInstance();
         bitStampAPI = retrofit.create(IBitStampAPI.class);
 
-/*        bitStampAPI.getTransaction("btcusd")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Transaction>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe");
-                    }
-
-                    @Override
-                    public void onNext(List<Transaction> transactions) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });*/
-
         fetchData();
 
         Switch switchGrid = view.findViewById(R.id.switch_grid);
@@ -120,6 +95,12 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Function that gets the transaction data from BitStamp's API through a GET Request.
+     * Retrieves a list containing all the transactions done in the past 24h
+     * related to the pair BTC/USD.
+     * Implemented using RxJava and Retrofit.
+     */
     private void fetchData() {
         compositeDisposable.add(bitStampAPI.getTransaction("btcusd", "day")
                 .subscribeOn(Schedulers.io())
@@ -127,9 +108,18 @@ public class HomeFragment extends Fragment {
                 .subscribe(transactions -> displayData(transactions)));
     }
 
+    /**
+     * Function that displays the price data of BTC/USD on the Line Chart.
+     * Price calculation is simplified, and to avoid crowding the chart
+     * with a lot of data points, the time spacing used between every price point
+     * is approximately every 16 minutes yielding an approximate of 80-90 data points
+     * for visualization.
+     * Implemented using MPAndroidCharts.
+     * @param transactions the list of transactions from the past 24 hours
+     */
     private void displayData(List<Transaction> transactions) {
 
-        // Line Chart with MPAndroidChart
+        // Line Chart with MPAndroidChart, styling and other misc. configuration
         priceChart = getView().findViewById(R.id.line_chart);
         priceChart.setDragEnabled(true);
         priceChart.setScaleYEnabled(false);
@@ -145,7 +135,8 @@ public class HomeFragment extends Fragment {
         priceChart.getAxisRight().setDrawGridLines(false);
         priceChart.getXAxis().setPosition(BOTTOM);
 
-        // Custom format for the MPAndroidChart X Axis
+        // Custom date and time format for the MPAndroidChart X Axis
+        // In this case it is only relevant to show the time since it is the last 24 hours.
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -157,64 +148,59 @@ public class HomeFragment extends Fragment {
 
         priceChart.getXAxis().setValueFormatter(formatter);
 
+        // List of entries that will populate the line chart
         ArrayList<Entry> yValues = new ArrayList<>();
+
+        // Counter to separate the time span between points
         long timeCounter = Long.parseLong(transactions.get(0).getDate()) + 1;
 
         for(Transaction t: transactions){
+            // Using the BTC/USD selling prices
             if (t.getType().equals("1") && timeCounter > Long.parseLong(t.getDate())){
                 yValues.add(new Entry(Float.parseFloat(t.getDate()) * 1000L, Float.parseFloat(t.getPrice())));
 
-                // Rough separator of data in seconds
+                // Rough separator of data in seconds to avoid overloading the chart with data.
                 timeCounter -= 1000;
-
-//                SimpleDateFormat jdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                String java_date = jdf.format(Long.parseLong(t.getDate()) * 1000L);
-//                System.out.println(java_date);
             }
 
         }
 
-
         // Sorts the list of entries to avoid an error with LineDataSet
         Collections.sort(yValues, new EntryXComparator());
 
-        // Insert the values here
+        // Creation of the data set to populate the chart
         btcusdDataSet = new LineDataSet(yValues, "BTC/USD");
-
-        System.out.println("Number of items set: " + btcusdDataSet.getValues().size());
 
         // Smooth curves of the line graph
         btcusdDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         btcusdDataSet.setCubicIntensity(0.1f);
 
+        // More styling settings for the data set
         btcusdDataSet.setLineWidth(1f);
         btcusdDataSet.setColor(Color.rgb(1,118,189));
-        btcusdDataSet.setDrawValues(false);
         btcusdDataSet.setValueTextSize(9);
+        btcusdDataSet.setHighLightColor(Color.rgb(250, 151, 43));
+        btcusdDataSet.setHighlightLineWidth(1);
 
         // Area below the line
         btcusdDataSet.setDrawFilled(true);
         btcusdDataSet.setFillColor(Color. rgb(1,118,189));
         btcusdDataSet.setFillAlpha(80);
 
-        // Remove circles
+        // Remove the circles of each data point
         btcusdDataSet.setDrawCircles(false);
 
-        btcusdDataSet.setHighLightColor(Color.rgb(250, 151, 43));
-        btcusdDataSet.setHighlightLineWidth(1);
+        btcusdDataSet.setDrawValues(false);
 
+        // Creating the line chart
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(btcusdDataSet);
-
         LineData data = new LineData(dataSets);
-
         priceChart.setData(data);
 
-        // Refresh the chart
+        // Refreshes the chart
         priceChart.invalidate();
-
     }
-
 
 
     @Override

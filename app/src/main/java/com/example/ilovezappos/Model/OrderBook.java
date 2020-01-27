@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+/**
+ * Model created based on the API data from Order Books
+ */
 public class OrderBook {
 
     @SerializedName("timestamp")

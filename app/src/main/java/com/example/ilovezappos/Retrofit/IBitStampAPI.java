@@ -13,6 +13,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface IBitStampAPI {
+
     @GET("transactions/{pair}")
     Observable<List<Transaction>> getTransaction(
             @Path("pair") String currencyPair,

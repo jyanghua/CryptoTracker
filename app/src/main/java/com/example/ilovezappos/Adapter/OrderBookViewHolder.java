@@ -2,7 +2,6 @@ package com.example.ilovezappos.Adapter;
 
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +11,7 @@ public class OrderBookViewHolder extends RecyclerView.ViewHolder {
 
     TextView txtValue, txtAmount, txtPrice;
 
+    // Default constructor for the view holder
     public OrderBookViewHolder(@NonNull View itemView) {
         super(itemView);
 

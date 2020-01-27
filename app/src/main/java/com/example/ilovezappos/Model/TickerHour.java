@@ -3,6 +3,9 @@ package com.example.ilovezappos.Model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Model created based on the API data from Ticker Hour
+ */
 public class TickerHour {
 
     @SerializedName("high")

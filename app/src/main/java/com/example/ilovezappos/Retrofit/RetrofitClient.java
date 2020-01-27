@@ -7,6 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
     private static Retrofit rInstance;
 
+    /**
+     * Default instance Retrofit object getter set to the Bitstamp API v2
+     * @return Instance of the Retrofit object
+     */
     public static Retrofit getInstance() {
         if(rInstance == null)
             rInstance = new Retrofit.Builder()
