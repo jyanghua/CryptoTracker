@@ -20,8 +20,12 @@ public interface IBitStampAPI {
     );
 
     @GET("order_book/{pair}")
-    Observable<List<OrderBook>> getOrderBook(@Path("pair") String currencyPair);
+    Observable<OrderBook> getOrderBook(
+            @Path("pair") String currencyPair
+    );
 
     @GET("ticker_hour/{pair}")
-    Observable<List<TickerHour>> getTickerHour(@Path("pair") String currencyPair);
+    Observable<List<TickerHour>> getTickerHour(
+            @Path("pair") String currencyPair
+    );
 }

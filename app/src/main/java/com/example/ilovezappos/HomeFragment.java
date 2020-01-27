@@ -15,7 +15,6 @@ import com.example.ilovezappos.Model.Transaction;
 import com.example.ilovezappos.Retrofit.IBitStampAPI;
 import com.example.ilovezappos.Retrofit.RetrofitClient;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -165,7 +164,7 @@ public class HomeFragment extends Fragment {
             if (t.getType().equals("1") && timeCounter > Long.parseLong(t.getDate())){
                 yValues.add(new Entry(Float.parseFloat(t.getDate()) * 1000L, Float.parseFloat(t.getPrice())));
 
-                // Rough separator of data by seconds
+                // Rough separator of data in seconds
                 timeCounter -= 1000;
 
 //                SimpleDateFormat jdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -7,15 +7,15 @@ import java.util.List;
 
 public class OrderBook {
 
-    @SerializedName("date")
+    @SerializedName("timestamp")
     @Expose
     public String timestamp;
 
-    @SerializedName("date")
+    @SerializedName("bids")
     @Expose
     public List<List<String>> bids;
 
-    @SerializedName("date")
+    @SerializedName("asks")
     @Expose
     public List<List<String>> asks;
 
