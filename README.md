@@ -12,4 +12,4 @@ Major requirements:
 More details will be included in the future.
 
 
-![Background](https://i.imgur.com/GwPV1yo.png)
+[![](https://i.imgur.com/GwPV1yo.png)](#)
