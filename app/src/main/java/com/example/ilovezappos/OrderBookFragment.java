@@ -17,6 +17,9 @@ import com.example.ilovezappos.Retrofit.IBitStampAPI;
 import com.example.ilovezappos.Retrofit.RetrofitClient;
 
 
+import javax.sql.DataSource;
+
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;

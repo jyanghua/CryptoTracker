@@ -25,7 +25,7 @@ public interface IBitStampAPI {
     );
 
     @GET("ticker_hour/{pair}")
-    Observable<List<TickerHour>> getTickerHour(
+    Observable<TickerHour> getTickerHour(
             @Path("pair") String currencyPair
     );
 }

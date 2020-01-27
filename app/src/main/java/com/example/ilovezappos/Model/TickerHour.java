@@ -5,39 +5,39 @@ import com.google.gson.annotations.SerializedName;
 
 public class TickerHour {
 
-    @SerializedName("date")
+    @SerializedName("high")
     @Expose
     public String high;
 
-    @SerializedName("date")
+    @SerializedName("last")
     @Expose
     public String last;
 
-    @SerializedName("date")
+    @SerializedName("timestamp")
     @Expose
     public String timestamp;
 
-    @SerializedName("date")
+    @SerializedName("bid")
     @Expose
     public String bid;
 
-    @SerializedName("date")
+    @SerializedName("vwap")
     @Expose
     public String vwap;
 
-    @SerializedName("date")
+    @SerializedName("volume")
     @Expose
     public String volume;
 
-    @SerializedName("date")
+    @SerializedName("low")
     @Expose
     public String low;
 
-    @SerializedName("date")
+    @SerializedName("ask")
     @Expose
     public String ask;
 
-    @SerializedName("date")
+    @SerializedName("open")
     @Expose
     public String open;
 
