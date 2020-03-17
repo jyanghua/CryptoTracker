@@ -1,4 +1,4 @@
-# ILoveZappos
+# ILoveZappos: Cryptocurrency Price Tracker
 
 *Disclaimer: This project is solely used to apply for an internship position at Zappos and is not for commercialization or for-profit purposes.*
 
@@ -8,8 +8,8 @@
 * Displayed a transaction history using an interactive line graph that shows how price for BTC/USD changed in the past 24 hours.
 * Used recycler view to display Order Books (Bids and Asks) and JobService to handle price alerts or notifications.
 * Managed REST requests using Retrofit and implemented ReactiveX with observer/observables for async data streams.
-* Biggest challenge: Finishing the application in 2 days total while learning new libraries.
-* Utilized: Java, Android Studio, JavaRx/AndroidRx, Material Design, Retrofit, mpAndroidChart, Bitstamp.net’s API.
+* *Biggest challenge:* Finishing the application in 2 days total while learning new libraries.
+* *Utilized:* Java, Android Studio, JavaRx/AndroidRx, Material Design, Retrofit, mpAndroidChart, Bitstamp.net’s API.
 
 
 ## Table of Contents
