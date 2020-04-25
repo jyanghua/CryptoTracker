@@ -1,4 +1,4 @@
-# ILoveZappos: Cryptocurrency Price Tracker
+# CryptoTracker: Cryptocurrency Price Tracker
 
 *Disclaimer: This project is solely used to apply for an internship position at Zappos and is not for commercialization or for-profit purposes.*
 
